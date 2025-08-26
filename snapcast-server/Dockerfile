@@ -2,26 +2,11 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:18.1.0
 FROM $BUILD_FROM
 
-# See https://github.com/librespot-org/librespot/wiki/Compiling#addition-features for librespot compile features.
-RUN \
-	apk add --no-cache --virtual .build-dependencies \
-        build-base \
-        cargo \
-        git \
-        protobuf-dev \
-        pulseaudio-dev \
-        avahi-dev \
-        autoconf \
-        automake \
-        libtool \
-        pkgconf \  
-        gcc \
-        g++ \
-        make \
-        cmake
-        #rust-bindgen
-RUN \
-	apk add --no-cache \
+ARG LIBRESPOT_VERSION=0.6.0
+ARG GM_RENDER_RESURRECT_VERSION=v0.3
+
+# Add Runtime Dependencies
+RUN apk add --no-cache \
         dbus \
         nss \
         avahi-compat-libdns_sd \
@@ -45,41 +30,68 @@ RUN \
         gstreamer-dev \
         gstreamer-tools
 
-        # RUN \
-# 	cargo install \
-#         --locked \
-#         --no-default-features \
-#         --features with-dns-sd \
-#         --root /usr \
-#         --bin librespot \
-#         --version 0.6.0 \
-#         --verbose \
-#         -- librespot
+# See https://github.com/librespot-org/librespot/wiki/Compiling#addition-features for librespot compile features.
+# Add Compiling Dependencies
+RUN apk add --no-cache --virtual .build-dependencies \
+        # cargo dependencies
+        cargo \
+        cmake \
+        avahi-dev \
+        make \
+        rust-bindgen \
+        clang18-dev
 
-RUN apk add --no-cache librespot --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
-RUN apk add --no-cache snapweb --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+RUN cargo install \
+        --locked \
+        --no-default-features \
+        --features with-avahi \
+        --root /usr \
+        --bin librespot \
+        --version ${LIBRESPOT_VERSION} \
+        # --verbose \
+        librespot
 
-RUN \
-        addgroup root audio
-RUN \
-	git clone https://github.com/hzeller/gmrender-resurrect.git \
+# Add Compiling Dependencies
+RUN apk add --no-cache --virtual .build-dependencies \
+        # gmrender-resurrect dependencies
+        git \
+        # build-base \
+        # protobuf-dev \
+        # pulseaudio-dev \
+        autoconf \
+        automake \
+        # libtool \
+        # pkgconf \  
+        # gcc \
+        g++ \
+        make \
+        cmake
+        # rust-bindgen
+
+RUN git clone https://github.com/hzeller/gmrender-resurrect.git \
 	&& mkdir -p /gmrender-resurrect \
 	&& cd /gmrender-resurrect \
+        && git checkout ${GM_RENDER_RESURRECT_VERSION} \
 	&& ./autogen.sh \
 	&& ./configure \
 	&& automake \
 	&& make \
 	&& make install
-RUN \
-	apk del --no-cache --purge .build-dependencies \
+
+RUN apk del --no-cache --purge .build-dependencies \
 	&& rm -fr \
-		/tmp/* \
-		~/.cargo \
-	        /usr/.crates.toml \
-	        /usr/.crates2.json \
+                /tmp/* \
+                ~/.cargo \
+                /usr/.crates.toml \
+                /usr/.crates2.json \
                 /gmrender-resurrect
-RUN \
-        mkdir -p /var/run/dbus
+
+# RUN apk add --no-cache librespot=0.6.0-r0 --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+RUN apk add --no-cache snapweb=0.9.1-r0 --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+
+RUN addgroup root audio
+
+RUN mkdir -p /var/run/dbus
         # && touch /var/run/dbus/system_bus_socket
 
 # https://stackoverflow.com/a/75295879 dbus daemon slow start fix
