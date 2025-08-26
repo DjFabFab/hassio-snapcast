@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Snapcast server
-version: "0.4.3"
+version: "0.4.4"
 slug: snapcast-server
 description: Snapcast server with Spotify connect and DLNA Renderer support
 url: "https://github.com/DjFabFab/hassio-snapcast/tree/main/snapcast-server"

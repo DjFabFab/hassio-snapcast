@@ -1,4 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
+## 0.4.4
+
+update: bump ghcr.io/hassio-addons/base to v18.1.0
+update: bump librespot to 0.7.0 (fixes #10)
+chore: cleanup Dockerfile
 
 ## 0.4.3
 
