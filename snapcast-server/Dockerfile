@@ -2,7 +2,7 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:18.1.0
 FROM $BUILD_FROM
 
-ARG LIBRESPOT_VERSION=0.6.0
+ARG LIBRESPOT_VERSION=0.7.0
 ARG GM_RENDER_RESURRECT_VERSION=v0.3
 
 # Add Runtime Dependencies
@@ -35,16 +35,16 @@ RUN apk add --no-cache \
 RUN apk add --no-cache --virtual .build-dependencies \
         # cargo dependencies
         cargo \
-        cmake \
-        avahi-dev \
-        make \
-        rust-bindgen \
-        clang18-dev
+        # cmake \
+        avahi-dev
+        # make \
+        # rust-bindgen \
+        # clang18-dev
 
 RUN cargo install \
         --locked \
         --no-default-features \
-        --features with-avahi \
+        --features with-avahi,rustls-tls-native-roots \
         --root /usr \
         --bin librespot \
         --version ${LIBRESPOT_VERSION} \
