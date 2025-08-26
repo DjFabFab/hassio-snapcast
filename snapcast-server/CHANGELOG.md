@@ -1,18 +1,18 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 ## 0.4.4
 
-update: bump ghcr.io/hassio-addons/base to v18.1.0
-update: bump librespot to 0.7.0 (fixes #10)
-chore: cleanup Dockerfile
+- update: bump ghcr.io/hassio-addons/base to v18.1.0
+- update: bump librespot to 0.7.0 (fixes #10)
+- chore: cleanup Dockerfile
 
 ## 0.4.3
 
-fix: respect samplerate in DLNA Media Render
-fix(snapserver): typo in config
+- fix: respect samplerate in DLNA Media Render
+- fix(snapserver): typo in config
 
 ## 0.4.2
 
-fix dbus long startup by @unex in #4
+- fix dbus long startup by @unex in #4
 
 ## 0.4.1
 
