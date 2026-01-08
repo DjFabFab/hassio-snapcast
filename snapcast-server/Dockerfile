@@ -2,7 +2,7 @@
 ARG BUILD_FROM=ghcr.io/hassio-addons/base:18.1.0
 FROM $BUILD_FROM
 
-ARG LIBRESPOT_VERSION=0.7.0
+ARG LIBRESPOT_VERSION=0.8.0
 ARG GM_RENDER_RESURRECT_VERSION=v0.3
 
 # Add Runtime Dependencies
@@ -87,7 +87,7 @@ RUN apk del --no-cache --purge .build-dependencies \
                 /gmrender-resurrect
 
 # RUN apk add --no-cache librespot=0.6.0-r0 --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
-RUN apk add --no-cache snapweb=0.9.1-r0 --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+RUN apk add --no-cache snapweb=0.9.2-r0 --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 RUN addgroup root audio
 
